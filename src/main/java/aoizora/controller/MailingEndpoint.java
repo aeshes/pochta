@@ -1,6 +1,7 @@
 package aoizora.controller;
 
 import aoizora.converter.MailingConverter;
+import aoizora.model.ForwardRequest;
 import aoizora.model.MailingDTO;
 import aoizora.service.MailingService;
 import io.swagger.annotations.Api;
@@ -35,6 +36,17 @@ public class MailingEndpoint
                 mailing.getType(),
                 mailing.getAddress(),
                 mailing.getPostcode()
+        )));
+    }
+
+    @ApiOperation(value = "Передать почтовое отправление из одного офиса в другой", produces = "application/json")
+    @PostMapping("/forward")
+    public ResponseEntity<MailingDTO> forward(@RequestBody ForwardRequest request)
+    {
+        return ResponseEntity.ok(mailingConverter.convert(mailingService.forward(
+                request.getMailingId(),
+                request.getFrom(),
+                request.getTo()
         )));
     }
 }
